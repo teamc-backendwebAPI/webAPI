@@ -72,7 +72,7 @@ func recipeHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-
+	//HTMLのテンプレートに値を渡す
 	tmpl := template.Must(template.ParseFiles("recipe.html"))
 	err := tmpl.Execute(w, foundRecipe)
 	if err != nil {
