@@ -1,0 +1,480 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "name": "チキンカレー",
+      "description": "スパイシーなチキンカレーは、じっくりと煮込んだ鶏肉と野菜が特徴の本格的なカレー料理です。家庭で簡単に作れるレシピで、ご飯によく合います。",
+      "image": "./images/chicken_curry.jpg",
+      "categories": ["インド料理", "カレー"],
+      "ingredients": [
+        {
+          "name": "鶏もも肉",
+          "amount": "500g"
+        },
+        {
+          "name": "玉ねぎ",
+          "amount": "2個"
+        },
+        {
+          "name": "にんじん",
+          "amount": "1本"
+        },
+        {
+          "name": "じゃがいも",
+          "amount": "2個"
+        },
+        {
+          "name": "カレー粉",
+          "amount": "大さじ3"
+        },
+        {
+          "name": "トマト缶",
+          "amount": "1缶"
+        },
+        {
+          "name": "水",
+          "amount": "500ml"
+        },
+        {
+          "name": "サラダ油",
+          "amount": "大さじ2"
+        },
+        {
+          "name": "塩",
+          "amount": "適量"
+        },
+        {
+          "name": "砂糖",
+          "amount": "小さじ1"
+        }
+      ],
+      "steps": [
+        "鶏もも肉は一口大に切り、玉ねぎ、にんじん、じゃがいもは粗みじん切りにする。",
+        "鍋にサラダ油を熱し、玉ねぎを炒める。透明になったら、鶏肉を加えて炒める。",
+        "鶏肉に火が通ったら、にんじん、じゃがいもを加え、さらに炒める。",
+        "カレー粉を加えて全体になじませたら、水を加える。",
+        "トマト缶を加え、煮立ったら弱火にし、40分ほど煮込む。",
+        "塩、砂糖で味を調える。",
+        "ご飯にかけて完成。"
+      ],
+      "nutrition": {
+        "calories": "350kcal(1人前)",
+        "protein": "25g",
+        "fat": "15g",
+        "carbohydrates": "35g"
+      },
+      "difficulty": "中級者",
+      "time": {
+        "prep": "20分",
+        "cook": "60分"
+      },
+      "created_at": "2023-01-01",
+      "updated_at": "2023-01-02"
+    },
+    {
+      "id": 2,
+      "name": "velit",
+      "description": "Occaecat irure incididunt dolor est dolore esse consectetur sint excepteur irure.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["中華"],
+      "ingredients": [
+        {
+          "name": "qui",
+          "amount": "100個"
+        },
+        {
+          "name": "nostrud",
+          "amount": "100g"
+        },
+        {
+          "name": "nostrud",
+          "amount": "1ml"
+        },
+        {
+          "name": "minim",
+          "amount": "100g"
+        },
+        {
+          "name": "sit",
+          "amount": "100ml"
+        }
+      ],
+      "steps": [
+        "Ea Lorem occaecat magna occaecat tempor nisi sint qui nisi velit.",
+        "Proident amet irure ullamco proident adipisicing proident minim magna qui magna fugiat.",
+        "Aliquip proident tempor fugiat est amet duis in officia ex officia minim esse velit.",
+        "Do commodo quis officia labore elit cupidatat minim.",
+        "Voluptate qui velit laboris nisi nisi mollit mollit.",
+        "Veniam irure velit id sit nulla enim aute adipisicing do id laborum."
+      ],
+      "nutrition": {
+        "calories": "436kcal",
+        "protein": "11g",
+        "fat": "26g",
+        "carbohydrates": "65g"
+      },
+      "difficulty": "初心者",
+      "time": {
+        "prep": "10分",
+        "cook": "60分"
+      },
+      "created_at": "2022-09-07",
+      "updated_at": "2023-02-10"
+    },
+    {
+      "id": 3,
+      "name": "quis",
+      "description": "Enim pariatur occaecat magna ad.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["和食"],
+      "ingredients": [
+        {
+          "name": "nulla",
+          "amount": "100ml"
+        },
+        {
+          "name": "magna",
+          "amount": "100個"
+        },
+        {
+          "name": "elit",
+          "amount": "1個"
+        }
+      ],
+      "steps": [
+        "Occaecat pariatur enim sit nulla dolor exercitation qui.",
+        "Enim duis id adipisicing est occaecat deserunt mollit consectetur eu duis consectetur.",
+        "Aute reprehenderit aliqua laborum proident in mollit tempor elit dolor do.",
+        "Irure in sit excepteur velit duis culpa dolore esse.",
+        "Qui mollit exercitation enim excepteur esse mollit.",
+        "Aliquip pariatur labore cillum Lorem officia qui veniam pariatur amet dolore id velit dolore.",
+        "Proident duis ipsum sunt aliquip esse."
+      ],
+      "nutrition": {
+        "calories": "195kcal",
+        "protein": "12g",
+        "fat": "7g",
+        "carbohydrates": "30g"
+      },
+      "difficulty": "初心者",
+      "time": {
+        "prep": "10分",
+        "cook": "10分"
+      },
+      "created_at": "2020-07-21",
+      "updated_at": "2022-11-06"
+    },
+    {
+      "id": 4,
+      "name": "ex",
+      "description": "Mollit aliquip elit deserunt deserunt elit irure sunt ipsum minim veniam aliqua id incididunt.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["洋食"],
+      "ingredients": [
+        {
+          "name": "anim",
+          "amount": "100g"
+        },
+        {
+          "name": "in",
+          "amount": "100個"
+        },
+        {
+          "name": "mollit",
+          "amount": "100ml"
+        },
+        {
+          "name": "proident",
+          "amount": "100g"
+        },
+        {
+          "name": "consequat",
+          "amount": "1個"
+        }
+      ],
+      "steps": [
+        "Aliqua est consectetur laboris ullamco.",
+        "Ut nulla eiusmod exercitation dolore excepteur nisi.",
+        "Laboris laboris adipisicing ad do velit do enim qui laborum pariatur aliquip aliquip excepteur."
+      ],
+      "nutrition": {
+        "calories": "253kcal",
+        "protein": "10g",
+        "fat": "11g",
+        "carbohydrates": "34g"
+      },
+      "difficulty": "中級者",
+      "time": {
+        "prep": "30分",
+        "cook": "10分"
+      },
+      "created_at": "2021-11-20",
+      "updated_at": "2020-09-17"
+    },
+    {
+      "id": 5,
+      "name": "sit",
+      "description": "Nulla elit incididunt est amet incididunt esse sint voluptate Lorem sunt cupidatat pariatur ad.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["洋食"],
+      "ingredients": [
+        {
+          "name": "non",
+          "amount": "1個"
+        },
+        {
+          "name": "officia",
+          "amount": "1個"
+        },
+        {
+          "name": "cupidatat",
+          "amount": "1個"
+        },
+        {
+          "name": "mollit",
+          "amount": "1ml"
+        }
+      ],
+      "steps": [
+        "Deserunt proident veniam quis eu amet officia esse fugiat sunt aliqua.",
+        "Nulla mollit sunt ad voluptate enim non veniam anim aliqua ullamco est aliquip adipisicing.",
+        "Ea adipisicing anim aliqua sunt deserunt culpa cillum amet.",
+        "Do exercitation nisi eiusmod qui quis pariatur nulla et voluptate elit veniam fugiat."
+      ],
+      "nutrition": {
+        "calories": "121kcal",
+        "protein": "9g",
+        "fat": "10g",
+        "carbohydrates": "30g"
+      },
+      "difficulty": "初心者",
+      "time": {
+        "prep": "30分",
+        "cook": "60分"
+      },
+      "created_at": "2023-11-01",
+      "updated_at": "2020-08-30"
+    },
+    {
+      "id": 6,
+      "name": "aliquip",
+      "description": "Nostrud do ad officia deserunt sunt deserunt dolore duis eu non id sit.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["中華"],
+      "ingredients": [
+        {
+          "name": "reprehenderit",
+          "amount": "100個"
+        },
+        {
+          "name": "id",
+          "amount": "100g"
+        },
+        {
+          "name": "occaecat",
+          "amount": "1g"
+        },
+        {
+          "name": "nisi",
+          "amount": "1g"
+        }
+      ],
+      "steps": [
+        "Nisi anim dolor nisi labore fugiat cillum voluptate officia.",
+        "Officia nisi anim in veniam cillum.",
+        "Ea enim ut labore ipsum sunt.",
+        "Magna do magna officia deserunt deserunt in voluptate magna.",
+        "Id proident nostrud esse reprehenderit laborum eu nostrud excepteur occaecat amet.",
+        "Aliquip exercitation exercitation exercitation dolor dolor laborum aliqua laborum est.",
+        "Id aute est enim enim sunt non nisi id proident do magna Lorem reprehenderit."
+      ],
+      "nutrition": {
+        "calories": "124kcal",
+        "protein": "10g",
+        "fat": "18g",
+        "carbohydrates": "94g"
+      },
+      "difficulty": "中級者",
+      "time": {
+        "prep": "10分",
+        "cook": "60分"
+      },
+      "created_at": "2020-11-11",
+      "updated_at": "2023-04-08"
+    },
+    {
+      "id": 7,
+      "name": "do",
+      "description": "Lorem culpa commodo nostrud elit labore occaecat culpa esse labore velit elit est.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["洋食"],
+      "ingredients": [
+        {
+          "name": "elit",
+          "amount": "1ml"
+        },
+        {
+          "name": "laborum",
+          "amount": "100個"
+        },
+        {
+          "name": "enim",
+          "amount": "1個"
+        }
+      ],
+      "steps": [
+        "Nisi fugiat Lorem ex eu non occaecat nostrud nulla est commodo proident irure ea mollit.",
+        "Consequat sint dolore ipsum ad culpa amet.",
+        "Lorem nostrud in et non aliquip nulla et non sit.",
+        "Laboris amet id occaecat eiusmod aliqua aliqua quis commodo.",
+        "Sunt nisi culpa anim reprehenderit amet sunt anim.",
+        "Laboris eu occaecat aute Lorem incididunt."
+      ],
+      "nutrition": {
+        "calories": "288kcal",
+        "protein": "6g",
+        "fat": "8g",
+        "carbohydrates": "2g"
+      },
+      "difficulty": "中級者",
+      "time": {
+        "prep": "10分",
+        "cook": "60分"
+      },
+      "created_at": "2020-04-01",
+      "updated_at": "2021-09-08"
+    },
+    {
+      "id": 8,
+      "name": "adipisicing",
+      "description": "Ea et eiusmod excepteur fugiat enim deserunt commodo occaecat proident ullamco aute veniam aliquip officia.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["中華"],
+      "ingredients": [
+        {
+          "name": "reprehenderit",
+          "amount": "100g"
+        },
+        {
+          "name": "ex",
+          "amount": "1ml"
+        },
+        {
+          "name": "officia",
+          "amount": "100g"
+        },
+        {
+          "name": "qui",
+          "amount": "1個"
+        },
+        {
+          "name": "do",
+          "amount": "1g"
+        }
+      ],
+      "steps": [
+        "Aute qui proident id duis.",
+        "Est sit ut nisi velit deserunt exercitation eu.",
+        "Non laborum minim laboris id excepteur.",
+        "Exercitation duis magna commodo nisi cupidatat voluptate dolor commodo adipisicing.",
+        "Dolore enim culpa aliquip cillum laboris laboris cupidatat ullamco.",
+        "Laboris in eu consequat ad eiusmod commodo culpa pariatur."
+      ],
+      "nutrition": {
+        "calories": "431kcal",
+        "protein": "14g",
+        "fat": "22g",
+        "carbohydrates": "52g"
+      },
+      "difficulty": "中級者",
+      "time": {
+        "prep": "10分",
+        "cook": "10分"
+      },
+      "created_at": "2022-04-20",
+      "updated_at": "2024-02-26"
+    },
+    {
+      "id": 9,
+      "name": "nulla",
+      "description": "Labore do irure aliqua cillum non esse aliqua eu.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["洋食"],
+      "ingredients": [
+        {
+          "name": "occaecat",
+          "amount": "100ml"
+        },
+        {
+          "name": "in",
+          "amount": "100個"
+        },
+        {
+          "name": "culpa",
+          "amount": "1個"
+        }
+      ],
+      "steps": [
+        "Lorem magna aliqua aute sint magna consectetur occaecat qui est incididunt sunt et.",
+        "Anim veniam excepteur proident aliquip incididunt laborum laborum non adipisicing ea eu qui cillum cillum.",
+        "Fugiat do esse sunt sit in id amet in.",
+        "Ipsum anim fugiat consequat duis occaecat."
+      ],
+      "nutrition": {
+        "calories": "154kcal",
+        "protein": "17g",
+        "fat": "8g",
+        "carbohydrates": "91g"
+      },
+      "difficulty": "中級者",
+      "time": {
+        "prep": "10分",
+        "cook": "10分"
+      },
+      "created_at": "2021-11-04",
+      "updated_at": "2023-07-28"
+    },
+    {
+      "id": 10,
+      "name": "tempor",
+      "description": "Magna elit eu voluptate in enim ea laboris consequat id.",
+      "image": "http://placekitten.com/200/300",
+      "categories": ["和食"],
+      "ingredients": [
+        {
+          "name": "fugiat",
+          "amount": "100個"
+        },
+        {
+          "name": "tempor",
+          "amount": "100g"
+        },
+        {
+          "name": "enim",
+          "amount": "1g"
+        }
+      ],
+      "steps": [
+        "Ex nisi occaecat pariatur laborum ut.",
+        "Labore ea qui sunt tempor et incididunt consequat excepteur labore labore in.",
+        "Cillum do officia mollit incididunt voluptate est laborum.",
+        "Lorem aliquip aliqua id dolore consequat do esse enim sunt ad aute commodo ullamco.",
+        "Exercitation enim excepteur ullamco veniam qui mollit.",
+        "Fugiat dolor nostrud proident magna exercitation Lorem magna non excepteur tempor."
+      ],
+      "nutrition": {
+        "calories": "333kcal",
+        "protein": "20g",
+        "fat": "26g",
+        "carbohydrates": "94g"
+      },
+      "difficulty": "中級者",
+      "time": {
+        "prep": "10分",
+        "cook": "10分"
+      },
+      "created_at": "2022-04-16",
+      "updated_at": "2022-05-30"
+    }
+  ]
+}
