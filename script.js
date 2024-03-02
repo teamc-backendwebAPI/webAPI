@@ -1,3 +1,4 @@
+/*
 let target = document.getElementById('target');
 const recipeName = 'チキンカレー';
 console.log('fetching recipe: ' + target);
@@ -58,3 +59,4 @@ function createRecipeHTML(data) {
 
   return child;
 }
+*/
