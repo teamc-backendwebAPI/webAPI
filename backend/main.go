@@ -41,7 +41,7 @@ type RecipesContainer struct {
 var container RecipesContainer
 
 func init() {
-	file, err := os.ReadFile("./sample.json")
+	file, err := os.ReadFile("../frontend/sample.json")
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		os.Exit(1)
@@ -73,7 +73,7 @@ func recipeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	//HTMLのテンプレートに値を渡す
-	tmpl := template.Must(template.ParseFiles("recipe.html"))
+	tmpl := template.Must(template.ParseFiles("../frontend/index.html"))
 	err := tmpl.Execute(w, foundRecipe)
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
