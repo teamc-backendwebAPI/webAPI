@@ -44,7 +44,7 @@ var container RecipesContainer
 
 func submitHandler(w http.ResponseWriter, r *http.Request) {
 	//index.htmlからレシピ名を取得
-	name := r.FormValue("name")
+	name := r.FormValue("recipeName")
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
 	defer resp.Body.Close()
