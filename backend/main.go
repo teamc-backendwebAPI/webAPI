@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"text/template"
+	"io"
 )
 
 type Recipe struct {
@@ -41,29 +42,34 @@ type RecipesContainer struct {
 var container RecipesContainer
 
 func init() {
-	file, err := os.ReadFile("../frontend/sample.json")
+	url := "https://api.edamam.com/api/recipes/v2?type=public&q=chicken&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
+
+	resp, err := http.Get(url)
+	defer resp.Body.Close()
+	
 	if err != nil {
-		fmt.Println("Error reading file:", err)
+		fmt.Println("Error getting data from Edamam:", err)
 		os.Exit(1)
 	}
 
-	err = json.Unmarshal(file, &container)
+
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Error decoding JSON:", err)
+		fmt.Println("Error reading data from Edamam:", err)
+		os.Exit(1)
+	}
+
+	err = json.Unmarshal(body, &container)
+	if err != nil {
+		fmt.Println("Error decoding JSON from Edamam:", err)
 		os.Exit(1)
 	}
 }
 
 func recipeHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
+	//クエリパラメータからレシピ名を取得
+	
 	recipeName := r.URL.Query().Get("name")
-	if recipeName == "" {
-		http.Error(w, "Missing recipe name", http.StatusBadRequest)
-		return
-	}
 
 	var foundRecipe Recipe
 	for _, recipe := range container.Recipes {
@@ -71,6 +77,11 @@ func recipeHandler(w http.ResponseWriter, r *http.Request) {
 			foundRecipe = recipe
 			break
 		}
+	}
+
+	if foundRecipe.Name == "" {
+		http.NotFound(w, r)
+		return
 	}
 	//HTMLのテンプレートに値を渡す
 	tmpl := template.Must(template.ParseFiles("../frontend/index.html"))
