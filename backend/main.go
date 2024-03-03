@@ -3,104 +3,73 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
-	"os"
-	"text/template"
-	"io"
 )
 
+type Ingredient struct {
+	Text   string  `json:"text"`
+	Weight float64 `json:"weight"`
+}
+
 type Recipe struct {
-	ID          int      `json:"id"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	ImageURL    string   `json:"image"`
-	Categories  []string `json:"categories"`
-	Ingredients []struct {
-		Name   string `json:"name"`
-		Amount string `json:"amount"`
-	} `json:"ingredients"`
-	Steps     []string `json:"steps"`
-	Nutrition struct {
-		Calories      string `json:"calories"`
-		Protein       string `json:"protein"`
-		Fat           string `json:"fat"`
-		Carbohydrates string `json:"carbohydrates"`
-	} `json:"nutrition"`
-	Difficulty string `json:"difficulty"`
-	Time       struct {
-		Prep string `json:"prep"`
-		Cook string `json:"cook"`
-	} `json:"time"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
+	Label       string       `json:"label"`
+	Image       string       `json:"image"`
+	Source      string       `json:"source"`
+	URL         string       `json:"url"`
+	Yield       float64      `json:"yield"`
+	Ingredients []Ingredient `json:"ingredients"`
+	Calories    float64      `json:"calories"`
+	TotalTime   float64      `json:"totalTime"`
 }
 
-type RecipesContainer struct {
-	Recipes []Recipe `json:"recipes"`
+type RecipeHit struct {
+	Recipe Recipe `json:"recipe"`
 }
 
-var container RecipesContainer
-
+type EdamamResponse struct {
+	Hits []RecipeHit `json:"hits"`
+}
 
 func submitHandler(w http.ResponseWriter, r *http.Request) {
-	//index.htmlからレシピ名を取得
-	name := r.FormValue("name")
+	// index.htmlからレシピ名を取得
+	name := r.FormValue("recipeName")
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
+	if err != nil {
+		http.Error(w, "Error getting data from Edamam: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 	defer resp.Body.Close()
-	
+
+	var edamamResponse EdamamResponse
+	err = json.NewDecoder(resp.Body).Decode(&edamamResponse)
 	if err != nil {
-		fmt.Println("Error getting data from Edamam:", err)
-		os.Exit(1)
-	}
-
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("Error reading data from Edamam:", err)
-		os.Exit(1)
-	}
-
-	err = json.Unmarshal(body, &container)
-	if err != nil {
-		fmt.Println("Error decoding JSON from Edamam:", err)
-		os.Exit(1)
-	}
-
-}
-
-func recipeHandler(w http.ResponseWriter, r *http.Request) {
-	//クエリパラメータからレシピ名を取得
-	recipeName := r.URL.Query().Get("name")
-
-	var foundRecipe Recipe
-	for _, recipe := range container.Recipes {
-		if recipe.Name == recipeName {
-			foundRecipe = recipe
-			break
-		}
-	}
-
-	if foundRecipe.Name == "" {
-		http.NotFound(w, r)
+		http.Error(w, "Error decoding JSON from Edamam: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	//HTMLのテンプレートに値を渡す
+
+	// レシピを取得できなかった場合
+	if len(edamamResponse.Hits) == 0 {
+		http.Error(w, "Error not found", http.StatusNotFound)
+		return
+	}
+
+	// レシピを1つだけ取得する
+	foundRecipe := edamamResponse.Hits[0].Recipe
+
+	// HTMLのテンプレートに値を渡す
 	tmpl := template.Must(template.ParseFiles("../frontend/index.html"))
-	err := tmpl.Execute(w, foundRecipe)
+	err = tmpl.Execute(w, foundRecipe)
 	if err != nil {
-		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		http.Error(w, "Error rendering template: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.NotFound(w, r)
-
 }
 
 func main() {
 	// htmlから受け取った内容をweb APIに送信
 	http.HandleFunc("/submit", submitHandler)
-	// web APIから受け取った内容をhtmlに送信
-	http.HandleFunc("/recipe", recipeHandler)
 	http.Handle("/", http.FileServer(http.Dir(".")))
 	fmt.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", nil)
