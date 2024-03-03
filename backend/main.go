@@ -33,7 +33,7 @@ type EdamamResponse struct {
 
 func submitHandler(w http.ResponseWriter, r *http.Request) {
 	// index.htmlからレシピ名を取得
-	name := r.FormValue("recipeName")
+	name := r.FormValue("name")
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
 	if err != nil {
@@ -66,11 +66,20 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+func topHandler(w http.ResponseWriter, r *http.Request) {
+	//テンプレートを表示するだけ。submitHundlerの軽量版
+	tmpl := template.Must(template.ParseFiles("../frontend/index.html"))
+	err := tmpl.Execute(w, nil)
+	if err != nil {
+		http.Error(w, "Error rendering template: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
 
 func main() {
 	// htmlから受け取った内容をweb APIに送信
+	http.HandleFunc("/", topHandler)
 	http.HandleFunc("/submit", submitHandler)
-	http.Handle("/", http.FileServer(http.Dir(".")))
 	fmt.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", nil)
 }
