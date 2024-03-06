@@ -52,9 +52,14 @@ func submitHandler(c *gin.Context) {
 		return
 	}
 
-	foundRecipe := edamamResponse.Hits[0].Recipe
+	//foundRecipe := edamamResponse.Hits[0].Recipe
+	//c.HTML(http.StatusOK, "index.html", foundRecipe)
 
-	c.HTML(http.StatusOK, "index.html", foundRecipe)
+	recipes := make([]Recipe, len(edamamResponse.Hits))
+	for i := 0; i < len(edamamResponse.Hits); i++ {
+		recipes[i] = edamamResponse.Hits[i].Recipe
+	}
+	c.HTML(http.StatusOK, "index.html", gin.H{"recipes": recipes})
 }
 
 func topHandler(c *gin.Context) {
@@ -66,6 +71,7 @@ func main() {
 	// frontendディレクトリの中身を読み込む
 	r.LoadHTMLGlob("../frontend/*")
 	r.GET("/", topHandler)
+
 	r.POST("/submit", submitHandler)
 	r.Run(":8080")
 }
