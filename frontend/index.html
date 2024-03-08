@@ -1,58 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recipe Display</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="border p-4 mt-4">
-                    <h2 class="text-center mb-4">レシピ検索</h2>
-                    <form action="/submit" method="post">
-                        <div class="form-group">
-                            <label for="recipeName">レシピ名</label>
-                            <input type="text" class="form-control" id="recipeName" name="name" placeholder="レシピ名を入力してください">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">検索</button>
-                    </form>
-                </div>
-            </div>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="border p-4 mt-4">
+            <h2 class="text-center mb-4">レシピ検索</h2>
+            <form action="/submit" method="post">
+              <div class="form-group">
+                <label for="recipeName">レシピ名</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="recipeName"
+                  name="name"
+                  placeholder="レシピ名を入力してください"
+                />
+              </div>
+              <div class="form-group form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="sortByCalories"
+                  name="sortCalories"
+                />
+                <label class="form-check-label" for="sortByCalories"
+                  >カロリーでソート</label
+                >
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                検索
+              </button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
-    
+
     <div class="container mt-5">
-        {{range .recipes}}
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{.Label}}</h5>
-                        <p class="card-text">{{.Label}}</p>
-                        <img src="{{.Image}}" class="img-fluid rounded" alt="{{.Label}}" />
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                Ingredients:
-                                <ul>
-                                    {{range .Ingredients}}
-                                        <li>{{.}}</li>
-                                    {{end}}
-                                </ul>
-                            </li>
-                            <li class="list-group-item">Nutrition: Calories {{.Label}}, Protein {{.Label}}, Fat {{.Label}}, Carbohydrates {{.Label}}</li>
-                            <li class="list-group-item">Difficulty: {{.Label}}</li>
-                            <li class="list-group-item">Prep Time: {{.Label}}, Cook Time: {{.Label}}</li>
-                        </ul>
-                    </div>
-                </div>
+      {{range .recipes}}
+      <div class="row justify-content-center my-4">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{.Label}}</h5>
+              <img
+                src="{{.Image}}"
+                class="img-fluid rounded"
+                alt="{{.Label}}"
+              />
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  Ingredients:
+                  <ul>
+                    {{range .Ingredients}}
+                    <li>{{.Text}}</li>
+                    {{end}}
+                  </ul>
+                </li>
+                <li class="list-group-item">
+                  Nutrition: Calories {{.RoundedCalories}} kcal
+                </li>
+                <li class="list-group-item">
+                  Source: {{.Source}}, URL: <a href="{{.URL}}">{{.URL}}</a>
+                </li>
+                <li class="list-group-item">
+                  Total Time: {{.TotalTime}} minutes
+                </li>
+              </ul>
             </div>
-        </div>  
-        {{end}}
+          </div>
+        </div>
+      </div>
+      {{end}}
     </div>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
@@ -60,5 +91,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
