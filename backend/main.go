@@ -3,13 +3,17 @@ package main
 import (
 	"WEBAPI/auth"
 	"encoding/json"
+	"log"
 	"math"
 	"net/http"
 	"sort"
 	"strconv"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 )
+
+var store = NewMemoryStore()
 
 type Ingredient struct {
 	Text   string  `json:"text"`
@@ -28,6 +32,11 @@ type Recipe struct {
 	RoundedCalories int
 }
 
+type MemoryStore struct {
+	Recipes map[int]Recipe
+	mu      sync.RWMutex
+}
+
 type RecipeHit struct {
 	Recipe Recipe `json:"recipe"`
 }
@@ -38,7 +47,31 @@ type EdamamResponse struct {
 
 var recipes []Recipe
 
+func NewMemoryStore() *MemoryStore {
+	return &MemoryStore{
+		Recipes: make(map[int]Recipe),
+	}
+}
+
+// SaveRecipe はレシピをMemoryStoreに保存します。
+func (store *MemoryStore) SaveRecipe(recipe Recipe, i int) {
+	store.mu.Lock()
+	defer store.mu.Unlock()
+
+	store.Recipes[i] = recipe
+}
+
+// GetRecipe は指定されたIDのレシピをMemoryStoreから取得します。
+func (store *MemoryStore) GetRecipe(id int) (Recipe, bool) {
+	store.mu.RLock()
+	defer store.mu.RUnlock()
+
+	recipe, exists := store.Recipes[id]
+	return recipe, exists
+}
+
 func submitHandler(c *gin.Context) {
+	log.Println("submitHandler")
 	name := c.PostForm("name")
 	sortCalories := c.PostForm("sortCalories") // ソートオプションの値を取得
 
@@ -71,6 +104,7 @@ func submitHandler(c *gin.Context) {
 		recipe := edamamResponse.Hits[i].Recipe
 		recipe.RoundedCalories = int(math.Round(recipe.Calories))
 		recipes[i] = recipe
+		store.SaveRecipe(recipe, i)
 	}
 
 	recipes = nil
@@ -102,13 +136,9 @@ func recipeHandler(c *gin.Context) {
 		return
 	}
 
-	if index >= len(recipes) || index < 0 {
-		c.String(http.StatusNotFound, "Recipe not found")
-		return
+	if recipe, exists := store.GetRecipe(index); exists {
+		c.HTML(http.StatusOK, "recipe.html", gin.H{"recipe": recipe})
 	}
-
-	recipe := recipes[index]
-	c.HTML(http.StatusOK, "recipe.html", gin.H{"recipe": recipe})
 }
 
 func main() {
