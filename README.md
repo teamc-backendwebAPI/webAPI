@@ -65,6 +65,7 @@ https://developer.edamam.com/edamam-docs-recipe-api
 
 # 使用例
 https://github.com/teamc-backendwebAPI/webAPI/assets/121601977/006bc42b-5ba1-46a4-99aa-b742bc149fc3
+<br>
 動画のように、知りたいものを入力して使用してください。
 <br>
 
