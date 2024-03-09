@@ -1,0 +1,41 @@
+<!-- recipe.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Detail</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <img src="{{$recipe.Image}}" class="card-img-top" alt="{{$recipe.Label}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{$recipe.Label}}</h5>
+                        <p class="card-text">Source: {{$recipe.Source}}</p>
+                        <h6>Ingredients:</h6>
+                        <ul>
+                            {{range $index , $ingredient := $recipe.Ingredients}}
+                            <li>{{$index}}. {{$ingredient.Text}}</li>
+                            {{end}}
+                        </ul>
+                        <p>Nutrition: Calories {{$recipe.Calories}}, Yield {{$recipe.Yield}}</p>
+                        <p>Prep Time: {{$recipe.TotalTime}} minutes</p>
+                        <a href="/" class="btn btn-primary">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
