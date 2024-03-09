@@ -25,30 +25,23 @@
             </div>
         </div>
     </div>
+    
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
+            {{range $index, $recipe := .recipes}}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <!-- レシピの画像をクリックすると、詳細ページに遷移する -->
+                    <a href="/recipe/{{$index}}">
+                        <img src="{{$recipe.Image}}" class="card-img-top" alt="{{$recipe.Label}}">
+                    </a>
                     <div class="card-body">
-                        <h5 class="card-title">{{.Label}}</h5>
-                        <p class="card-text">{{.Label}}</p>
-                        <img src="{{.Image}}" class="img-fluid rounded" alt="{{.Label}}" />
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                Ingredients:
-                                <ul>
-                                    {{range .Ingredients}}
-                                    {{end}}
-                                </ul>
-                            </li>
-                            <li class="list-group-item">Nutrition: Calories {{.Label}}, Protein {{.Label}}, Fat {{.Label}}, Carbohydrates {{.Label}}</li>
-                            <li class="list-group-item">Difficulty: {{.Label}}</li>
-                            <li class="list-group-item">Prep Time: {{.Label}}, Cook Time: {{.Label}}</li>
-                        </ul>
-                        <p class="card-text"><small class="text-muted">Last updated {{.CreatedAt}}</small></p>
+                        <h5 class="card-title">{{$recipe.Label}}</h5>
+                        <p class="card-text">Source: {{$recipe.Source}}</p>
                     </div>
                 </div>
             </div>
+            {{end}}
         </div>
     </div>
 
