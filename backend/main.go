@@ -5,6 +5,7 @@ import (
 	"math"
 	"net/http"
 	"sort"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,6 +34,8 @@ type RecipeHit struct {
 type EdamamResponse struct {
 	Hits []RecipeHit `json:"hits"`
 }
+
+var recipes []Recipe
 
 func submitHandler(c *gin.Context) {
 	name := c.PostForm("name")
@@ -67,6 +70,10 @@ func submitHandler(c *gin.Context) {
 		recipe := edamamResponse.Hits[i].Recipe
 		recipe.RoundedCalories = int(math.Round(recipe.Calories))
 		recipes[i] = recipe
+
+	recipes = nil
+	for i := 0; i < len(edamamResponse.Hits); i++ {
+		recipes = append(recipes, edamamResponse.Hits[i].Recipe)
 	}
 
 	// カロリーでソートするかどうかチェック
@@ -85,6 +92,23 @@ func topHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", nil)
 }
 
+func recipeHandler(c *gin.Context) {
+	indexStr := c.Param("index")
+	index, err := strconv.Atoi(indexStr)
+	if err != nil {
+		c.String(http.StatusBadRequest, "Invalid index")
+		return
+	}
+
+	if index >= len(recipes) || index < 0 {
+		c.String(http.StatusNotFound, "Recipe not found")
+		return
+	}
+
+	recipe := recipes[index]
+	c.HTML(http.StatusOK, "recipe.html", gin.H{"recipe": recipe})
+}
+
 func main() {
 	r := gin.Default()
 	// frontendディレクトリの中身を読み込む
@@ -92,5 +116,6 @@ func main() {
 	r.GET("/", topHandler)
 
 	r.POST("/submit", submitHandler)
+	r.GET("/recipe/:index", recipeHandler)
 	r.Run(":8080")
 }

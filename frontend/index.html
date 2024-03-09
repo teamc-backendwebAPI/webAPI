@@ -84,6 +84,22 @@
         </div>
       </div>
       {{end}}
+        <div class="row justify-content-center">
+            {{range $index, $recipe := .recipes}}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <!-- レシピの画像をクリックすると、詳細ページに遷移する -->
+                    <a href="/recipe/{{$index}}">
+                        <img src="{{$recipe.Image}}" class="card-img-top" alt="{{$recipe.Label}}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{$recipe.Label}}</h5>
+                        <p class="card-text">Source: {{$recipe.Source}}</p>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
     </div>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
