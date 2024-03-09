@@ -83,10 +83,8 @@ func recipeHandler(c *gin.Context) {
 		return
 	}
 
-	recipes := recipes[index]
-	c.HTML(http.StatusOK, "recipe.html", gin.H{
-		"recipes": recipes,
-	})
+	recipe := recipes[index]
+	c.HTML(http.StatusOK, "recipe.html", gin.H{"recipe": recipe})
 }
 
 func main() {
