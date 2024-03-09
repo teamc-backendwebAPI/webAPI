@@ -1,6 +1,7 @@
 package main
 
 import (
+	"WEBAPI/auth"
 	"encoding/json"
 	"math"
 	"net/http"
@@ -111,8 +112,20 @@ func recipeHandler(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
+	auth.DbInit()
 	// frontendディレクトリの中身を読み込む
 	r.LoadHTMLGlob("../frontend/*")
+	r.GET("/signup", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "signup.html", nil)
+	})
+	r.POST("/signup", auth.SignUpUser)
+
+	r.GET("/login", func(c *gin.Context) {
+		c.HTML(200, "login.html", gin.H{})
+	})
+	r.POST("/login", auth.LoginUser)
+
+
 	r.GET("/", topHandler)
 
 	r.POST("/submit", submitHandler)
