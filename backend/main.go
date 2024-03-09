@@ -71,6 +71,7 @@ func submitHandler(c *gin.Context) {
 		recipe := edamamResponse.Hits[i].Recipe
 		recipe.RoundedCalories = int(math.Round(recipe.Calories))
 		recipes[i] = recipe
+	}
 
 	recipes = nil
 	for i := 0; i < len(edamamResponse.Hits); i++ {
