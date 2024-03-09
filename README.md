@@ -1,7 +1,7 @@
 # 概要
 フォーム画面に知りたい名称を入力すれば、レシピの一覧やその詳細を知ることができるアプリです。<br>
 ![gif](https://github.com/teamc-backendwebAPI/webAPI/assets/121601977/006bc42b-5ba1-46a4-99aa-b742bc149fc3)
-<br>
+
 レシピは、230万件を超えるレシピを提供している無料API（以下のサイト）から取得しています。
 https://developer.edamam.com/edamam-docs-recipe-api
 
