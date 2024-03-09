@@ -8,8 +8,10 @@ https://developer.edamam.com/edamam-docs-recipe-api
 
 # エンドポイント
 1. レシピ検索APIのエンドポイント
+ <br>
  POST `/submit`　入力してもらったレシピ名を送信してもらい、その種類や詳細なレシピ情報を上記サイトから取得する。
 2. レシピ詳細表示APIのエンドポイント
+<br>
  GET `/recipe/:index`　選択したレシピの詳細情報を取得し表示する。
 
 <br>
