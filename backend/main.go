@@ -45,7 +45,6 @@ type EdamamResponse struct {
 	Hits []RecipeHit `json:"hits"`
 }
 
-var recipes []Recipe
 
 func NewMemoryStore() *MemoryStore {
 	return &MemoryStore{
@@ -74,6 +73,10 @@ func submitHandler(c *gin.Context) {
 	log.Println("submitHandler")
 	name := c.PostForm("name")
 	sortCalories := c.PostForm("sortCalories") // ソートオプションの値を取得
+
+	// ページネーションのパラメータを取得
+	page, err := strconv.Atoi(c.DefaultPostForm("page", "1"))
+	pageSize, err := strconv.Atoi(c.DefaultPostForm("pageSize", "6"))
 
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
@@ -120,6 +123,14 @@ func submitHandler(c *gin.Context) {
 		})
 	}
 
+	// ページネーションの範囲を計算
+	start := (page - 1) * pageSize
+	end := start + pageSize
+	if end > len(recipes) {
+		end = len(recipes)
+	}
+	// ページネーションの範囲でレシピをフィルタリング
+	recipes = recipes[start:end]
 	c.HTML(http.StatusOK, "index.html", gin.H{"recipes": recipes})
 }
 
@@ -157,6 +168,7 @@ func main() {
 		c.HTML(200, "login.html", gin.H{})
 	})
 	r.POST("/login", auth.LoginUser)
+	
 
 	r.GET("/", topHandler)
 	r.POST("/submit", submitHandler)
