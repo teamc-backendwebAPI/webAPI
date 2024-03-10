@@ -16,7 +16,8 @@ webAPIの機能はレシピ検索、ページ分け、APIドキュメントの�
 
 ## サイト全体の流れ
 
-![ezgif com-video-to-gif-converter](https://github.com/teamc-backendwebAPI/webAPI/assets/81165526/60c61255-5848-43d4-9309-46d35d07adab)
+![ezgif com-video-to-gif-converter (1)](https://github.com/teamc-backendwebAPI/webAPI/assets/81165526/9d63283e-ac8b-4091-853a-1275e914544c)
+
 
 # 環境構築(MySQL)
 
