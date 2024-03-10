@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        ol {
+            margin-bottom: 20px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .language-json {
+            color: #000;
+        }
+        .hljs-attr {
+            color: #d73a49;
+        }
+        .hljs-string {
+            color: #032f62;
+        }
+        .hljs-punctuation {
+            color: #6f42c1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="概要">概要</h1>
+        <p>フォーム画面に知りたい名称を入力すれば、レシピの一覧やその詳細を知ることができるアプリです。<br></p>
+        <p>レシピは、230 万件を超えるレシピを提供している無料 API（以下のサイト）から取得しています。
+        <a href="https://developer.edamam.com/edamam-docs-recipe-api">https://developer.edamam.com/edamam-docs-recipe-api</a></p>
+        <br>
+        <h1 id="環境構築mysql">環境構築(MySQL)</h1>
+        <p>mysql を起動してターミナルで以下のコマンドを実行してデータベースをローカル環境に作成してください。</p>
+        <ol>
+            <li>データベースの作成
+                <pre><code>CREATE DATABASE c_auth;</code></pre>
+            </li>
+            <li>新しいユーザーの作成
+                <pre><code>CREATE USER 'c_auth'@'localhost' IDENTIFIED BY 'c_webAPI_@auth123';</code></pre>
+            </li>
+            <li>権限の付与
+                <pre><code>GRANT ALL PRIVILEGES ON c_auth.* TO 'c_auth'@'localhost';</code></pre>
+            </li>
+            <li>権限のリフレッシュ
+                <pre><code>FLUSH PRIVILEGES;</code></pre>
+            </li>
+        </ol>
+        <p>.envファイルをルートディレクトリに作って以下のように記述してください。&quot;&quot;はいらないです。</p>
+        <pre><code>DB_DBMS=mysql
+DB_USER=c_auth
+DB_PASS=c_webAPI_@auth123
+DB_DBNAME=c_auth
+</code></pre>
+        <p><code>go get</code>コマンドで不足しているライブラリはインポートしてから<code>go run .</code>をmain.goがあるディレクトリで実行してください。</p>
+        <h1 id="エンドポイント">エンドポイント</h1>
+        <ol>
+            <li>レシピ検索 API のエンドポイント<br>
+                POST <code>/submit</code>　入力してもらったレシピ名を送信してもらい、その種類や詳細なレシピ情報を上記サイトから取得する。</li>
+            <li>レシピ詳細表示 API のエンドポイント<br>
+                GET <code>/recipe/:index</code>　選択したレシピの詳細情報を取得し表示する。</li>
+        </ol>
+        <br>
+        <h1 id="リクエスト">リクエスト</h1>
+        <h3 id="リクエストボディ">リクエストボディ</h3>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>パラメータ</th>
+                    <th>データ型</th>
+                    <th>説明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td>string</td>
+                    <td>検索するレシピの名前</td>
+                </tr>
+            </tbody>
+        </table>
+        <h1 id="レスポンス">レスポンス</h1>
+        <h3 id="ステータスコード">ステータスコード</h3>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>ステータスコード</th>
+                    <th>説明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>200</td>
+                    <td>リクエスト成功</td>
+                </tr>
+                <tr>
+                    <td>400</td>
+                    <td>無効なインデックス</td>
+                </tr>
+                <tr>
+                    <td>404</td>
+                    <td>レシピが見つからない</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3 id="レスポンスボディ">レスポンスボディ</h3>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>パラメータ</th>
+                    <th>データ型</th>
+                    <th>説明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>recipes</td>
+                    <td>array</td>
+                    <td>検索したレシピを含む配列</td>
+                </tr>
+                <tr>
+                    <td>recipe</td>
+                    <td>object</td>
+                    <td>レシピの情報</td>
+                </tr>
+                <tr>
+                    <td>label</td>
+                    <td>string</td>
+                    <td>レシピ名</td>
+                </tr>
+                <tr>
+                    <td>image</td>
+                    <td>string</td>
+                    <td>レシピの画像 URL</td>
+                </tr>
+                <tr>
+                    <td>source</td>
+                    <td>string</td>
+                    <td>レシピの出典</td>
+                </tr>
+                <tr>
+                    <td>url</td>
+                    <td>string</td>
+                    <td>レシピ URL</td>
+                </tr>
+                <tr>
+                    <td>yield</td>
+                    <td>float64</td>
+                    <td>レシピの量</td>
+                </tr>
+                <tr>
+                    <td>ingredients</td>
+                    <td>array</td>
+                    <td>レシピの材料</td>
+                </tr>
+                <tr>
+                    <td>calories</td>
+                    <td>float64</td>
+                    <td>レシピのカロリー</td>
+                </tr>
+                <tr>
+                    <td>totalTime</td>
+                    <td>float64</td>
+                    <td>レシピの調理時間</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h1 id="エラーハンドリング">エラーハンドリング</h1>
+        <h3 id="ステータスコード400">ステータスコード:400</h3>
+        <pre><code class="language-json">{
+  "error": "Invalid index"
+}</code></pre>
+        <h3 id="ステータスコード404">ステータスコード:404</h3>
+        <pre><code class="language-json">{
+  "error": "Recipe not found"
+}</code></pre>
+        <br>
+        <h1 id="認証">認証</h1>
+        <p>不要<br></p>
+        <h1 id="制限事項">制限事項</h1>
+        <p>EDAMAM の DEVELOPER 向け API を使用しています。フリーライセンスであり、検索できる回数に限りがあります。</p>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

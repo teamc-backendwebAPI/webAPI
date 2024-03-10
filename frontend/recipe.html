@@ -24,15 +24,15 @@
                             <li>{{$index}}. {{$ingredient.Text}}</li>
                             {{end}}
                         </ul>
-                        <p>Nutrition: Calories {{.recipe.Calories}}, Yield {{.recipe.Yield}}</p>
+                        <p>Nutrition: Calories {{.recipe.RoundedCalories}} kcal, Yield {{.recipe.Yield}}</p>
                         <p>Prep Time: {{.recipe.TotalTime}} minutes</p>
-                        <a href="/" class="btn btn-primary">Back to Home</a>
+                        <a href="javascript:history.back()" class="btn btn-primary">Back to Home</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
