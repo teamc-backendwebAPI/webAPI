@@ -46,7 +46,6 @@ type EdamamResponse struct {
 	Hits []RecipeHit `json:"hits"`
 }
 
-
 func NewMemoryStore() *MemoryStore {
 	return &MemoryStore{
 		Recipes: make(map[int]Recipe),
@@ -88,7 +87,6 @@ func submitHandler(c *gin.Context) {
 		log.Println("Error getting page or pageSize: ", err)
 		pageSize = 6
 	}
-
 
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
@@ -141,8 +139,8 @@ func submitHandler(c *gin.Context) {
 		prevPage = 1
 	}
 	nextPage := page + 1
-	if nextPage > len(recipes) {
-		nextPage = len(recipes)
+	if nextPage > (len(recipes) / pageSize) {
+		nextPage = (len(recipes) / pageSize) + 1
 	}
 
 	// ページネーションの範囲を計算
@@ -153,19 +151,18 @@ func submitHandler(c *gin.Context) {
 	}
 	// ページネーションの範囲でレシピをフィルタリング
 	separateRecipes = recipes[start:end]
-	
+
 	fmt.Println("page:", page)
 	fmt.Println("prevPage:", prevPage)
 	fmt.Println("nextPage:", nextPage)
 
 	c.HTML(http.StatusOK, "index.html", gin.H{
-		"recipes": separateRecipes,
-		"page": page,
+		"recipes":  separateRecipes,
+		"page":     page,
 		"prevPage": prevPage,
 		"nextPage": nextPage,
 	})
 }
-
 
 func topHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", nil)
@@ -201,8 +198,6 @@ func main() {
 		c.HTML(200, "login.html", gin.H{})
 	})
 	r.POST("/login", auth.LoginUser)
-	
-	
 
 	r.GET("/", topHandler)
 	r.POST("/submit", submitHandler)
