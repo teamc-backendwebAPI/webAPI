@@ -10,10 +10,7 @@ https://developer.edamam.com/edamam-docs-recipe-api
 
 mysql を起動してターミナルで以下のコマンドを実行してデータベースをローカル環境に作成してください。
 
-## windowsの場合
-   `mysql --user=root --password`
-   で接続可能
-   
+
 1. データベースの作成
    `CREATE DATABASE c_auth;`
 
@@ -36,7 +33,10 @@ DB_DBNAME=c_auth
 
 `go get`コマンドで不足しているライブラリはインポートしてから`go run .`をmain.goがあるディレクトリで実行してください。
 
-## macOSの場合
+## windowsの場合
+   `mysql --user=root --password`
+   で接続可能
+   
 
 # エンドポイント
 
