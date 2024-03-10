@@ -62,7 +62,7 @@ func NewMemoryStore() *MemoryStore {
 func (store *MemoryStore) SavePagination(page int) {
 	store.mu.Lock()
 	defer store.mu.Unlock()
-
+	
 	store.currentPage = page
 }
 
