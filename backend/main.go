@@ -3,7 +3,6 @@ package main
 import (
 	"WEBAPI/auth"
 	"encoding/json"
-	"fmt"
 	"log"
 	"math"
 	"net/http"
@@ -15,6 +14,13 @@ import (
 )
 
 var store = NewMemoryStore()
+
+type PageNationData struct {
+	NextPage int
+	PrevPage int
+	CurrentPage int
+	TotalPages  int
+}
 
 type Ingredient struct {
 	Text   string  `json:"text"`
@@ -76,18 +82,6 @@ func submitHandler(c *gin.Context) {
 	name := c.PostForm("name")
 	sortCalories := c.PostForm("sortCalories") // ソートオプションの値を取得
 
-	// ページネーションのパラメータを取得
-	page, err := strconv.Atoi(c.DefaultPostForm("page", "1"))
-	if err != nil {
-		log.Println("Error getting page or pageSize: ", err)
-		page = 1
-	}
-	pageSize, err := strconv.Atoi(c.DefaultPostForm("pageSize", "6"))
-	if err != nil {
-		log.Println("Error getting page or pageSize: ", err)
-		pageSize = 6
-	}
-
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
 	if err != nil {
@@ -133,36 +127,98 @@ func submitHandler(c *gin.Context) {
 		})
 	}
 
-	// ページネーションの情報を計算
-	prevPage := page - 1
-	if prevPage < 1 {
-		prevPage = 1
+	pageStr := c.Param("page")
+	page, _ := strconv.Atoi(pageStr)
+	pageSize := 6 // Assuming a fixed page size for simplicity
+
+	log.Println("pageNationHandler", page)
+
+	store.mu.RLock() // Lock for reading
+	recipesSlice := make([]Recipe, 0, len(store.Recipes))
+	for _, recipe := range store.Recipes {
+		recipesSlice = append(recipesSlice, recipe)
 	}
-	nextPage := page + 1
-	if nextPage > (len(recipes) / pageSize) {
-		nextPage = (len(recipes) / pageSize) + 1
+	store.mu.RUnlock()
+
+	// Calculating pagination values
+	totalRecipes := len(recipesSlice)
+	totalPages := int(math.Ceil(float64(totalRecipes) / float64(pageSize)))
+
+	if page < 1 {
+		page = 1
+	} else if page > totalPages {
+		page = totalPages
 	}
 
-	// ページネーションの範囲を計算
 	start := (page - 1) * pageSize
 	end := start + pageSize
-	if end > len(recipes) {
-		end = len(recipes)
+	if end > totalRecipes {
+		end = totalRecipes
 	}
-	// ページネーションの範囲でレシピをフィルタリング
-	separateRecipes = recipes[start:end]
 
-	fmt.Println("page:", page)
-	fmt.Println("prevPage:", prevPage)
-	fmt.Println("nextPage:", nextPage)
+	// Getting the slice for the current page
+	currentPageRecipes := recipesSlice[start:end]
 
 	c.HTML(http.StatusOK, "index.html", gin.H{
-		"recipes":  separateRecipes,
-		"page":     page,
-		"prevPage": prevPage,
-		"nextPage": nextPage,
+		"recipes":  currentPageRecipes,
+		"pagenation":PageNationData{
+			NextPage: page + 1,
+			PrevPage: page - 1,
+			CurrentPage: page,
+		},
 	})
 }
+
+func pageNationHandler(c *gin.Context) {
+	pageStr := c.Param("page")
+	page, _ := strconv.Atoi(pageStr)
+	pageSize := 6 // Assuming a fixed page size for simplicity
+
+	log.Println("pageNationHandler", page)
+
+	store.mu.RLock() // Lock for reading
+	recipesSlice := make([]Recipe, 0, len(store.Recipes))
+	for _, recipe := range store.Recipes {
+		recipesSlice = append(recipesSlice, recipe)
+	}
+	store.mu.RUnlock()
+
+	// Calculating pagination values
+	totalRecipes := len(recipesSlice)
+	totalPages := int(math.Ceil(float64(totalRecipes) / float64(pageSize)))
+
+	if page < 1 {
+		page = 1
+	} else if page > totalPages {
+		page = totalPages
+	}
+
+	start := (page - 1) * pageSize
+	end := start + pageSize
+	if end > totalRecipes {
+		end = totalRecipes
+	}
+
+	// Getting the slice for the current page
+	currentPageRecipes := recipesSlice[start:end]
+
+	// トータルページ数を考慮したページネーションデータの修正
+	paginationData := PageNationData{
+		NextPage:    page + 1,
+		PrevPage:    page - 1,
+		CurrentPage: page,
+		TotalPages:  totalPages, // トータルページ数を追加
+	}
+	if paginationData.NextPage > totalPages {
+		paginationData.NextPage = 0 // 次のページがない場合は0を設定
+	}
+
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"recipes":  currentPageRecipes,
+		"pagenation": paginationData,
+	})
+}
+
 
 func topHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", nil)
@@ -202,6 +258,7 @@ func main() {
 	r.GET("/", topHandler)
 	r.POST("/submit", submitHandler)
 	r.GET("/recipe/:index", recipeHandler)
+	r.GET("/submit/page/:page", pageNationHandler)
 	r.GET("/api-documentation", apiDocumentationHandler)
 	r.Run(":8080")
 }
