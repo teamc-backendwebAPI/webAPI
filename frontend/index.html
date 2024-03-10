@@ -108,26 +108,26 @@
       </div>
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-          <li class="page-item {{if eq .pagination.PrevPage 0}}disabled{{end}}">
+          <li class="page-item {{if eq .pagenation.PrevPage 0}}disabled{{end}}">
             <a
               class="page-link"
-              href="/submit/page/{{.pagination.PrevPage}}"
+              href="/submit/page/{{.pagenation.PrevPage}}"
               aria-label="Previous"
             >
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
           <li class="page-item disabled">
-            <a class="page-link" href="#">Page {{.pagination.CurrentPage}}</a>
+            <a class="page-link" href="#">Page {{.pagenation.CurrentPage}}</a>
           </li>
-          {{if lt .pagination.CurrentPage .pagination.TotalPages}}
+          {{if lt .pagenation.CurrentPage .pagenation.TotalPages}}
           <li class="page-item">{{else}}</li>
 
           <li class="page-item disabled">
             {{end}}
             <a
               class="page-link"
-              href="/submit/page/{{.pagination.NextPage}}"
+              href="/submit/page/{{.pagenation.NextPage}}"
               aria-label="Next"
             >
               <span aria-hidden="true">&raquo;</span>

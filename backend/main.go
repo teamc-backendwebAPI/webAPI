@@ -127,46 +127,7 @@ func submitHandler(c *gin.Context) {
 		})
 	}
 
-	pageStr := c.Param("page")
-	page, _ := strconv.Atoi(pageStr)
-	pageSize := 6 // Assuming a fixed page size for simplicity
-
-	log.Println("pageNationHandler", page)
-
-	store.mu.RLock() // Lock for reading
-	recipesSlice := make([]Recipe, 0, len(store.Recipes))
-	for _, recipe := range store.Recipes {
-		recipesSlice = append(recipesSlice, recipe)
-	}
-	store.mu.RUnlock()
-
-	// Calculating pagination values
-	totalRecipes := len(recipesSlice)
-	totalPages := int(math.Ceil(float64(totalRecipes) / float64(pageSize)))
-
-	if page < 1 {
-		page = 1
-	} else if page > totalPages {
-		page = totalPages
-	}
-
-	start := (page - 1) * pageSize
-	end := start + pageSize
-	if end > totalRecipes {
-		end = totalRecipes
-	}
-
-	// Getting the slice for the current page
-	currentPageRecipes := recipesSlice[start:end]
-
-	c.HTML(http.StatusOK, "index.html", gin.H{
-		"recipes":  currentPageRecipes,
-		"pagenation":PageNationData{
-			NextPage: page + 1,
-			PrevPage: page - 1,
-			CurrentPage: page,
-		},
-	})
+	pageNationHandler(c)
 }
 
 func pageNationHandler(c *gin.Context) {
