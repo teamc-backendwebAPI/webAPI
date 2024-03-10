@@ -41,6 +41,7 @@ type Recipe struct {
 
 type MemoryStore struct {
 	Recipes map[int]Recipe
+	currentPage int
 	mu      sync.RWMutex
 }
 
@@ -56,6 +57,22 @@ func NewMemoryStore() *MemoryStore {
 	return &MemoryStore{
 		Recipes: make(map[int]Recipe),
 	}
+}
+
+func (store *MemoryStore) SavePagination(page int) {
+	store.mu.Lock()
+	defer store.mu.Unlock()
+
+	store.currentPage = page
+}
+
+func (store *MemoryStore) GetPagination() int {
+	store.mu.RLock()
+	defer store.mu.RUnlock()
+
+	page := store.currentPage
+
+	return page
 }
 
 // SaveRecipe はレシピをMemoryStoreに保存します。
@@ -135,6 +152,8 @@ func pageNationHandler(c *gin.Context) {
 	page, _ := strconv.Atoi(pageStr)
 	pageSize := 6 // Assuming a fixed page size for simplicity
 
+	store.SavePagination(page)
+
 	log.Println("pageNationHandler", page)
 
 	store.mu.RLock() // Lock for reading
@@ -143,7 +162,6 @@ func pageNationHandler(c *gin.Context) {
 		recipesSlice = append(recipesSlice, recipe)
 	}
 	store.mu.RUnlock()
-	// log.Println("recipesSlice", recipesSlice)
 
 	// Calculating pagination values
 	totalRecipes := len(recipesSlice)
@@ -173,7 +191,6 @@ func pageNationHandler(c *gin.Context) {
 
 	// Getting the slice for the current page
 	log.Println("start", start, "end", end)
-	// currentPageRecipes := recipesSlice[start:end]
 
 	// トータルページ数を考慮したページネーションデータの修正
 	paginationData := PageNationData{
@@ -205,6 +222,12 @@ func recipeHandler(c *gin.Context) {
 		return
 	}
 
+	page := store.GetPagination()
+	if page > 1 {
+		index = index + (page - 1) * 6
+	}
+
+	log.Println("recipeHandler", index)
 	if recipe, exists := store.GetRecipe(index); exists {
 		c.HTML(http.StatusOK, "recipe.html", gin.H{"recipe": recipe})
 	}
