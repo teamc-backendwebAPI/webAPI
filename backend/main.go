@@ -21,14 +21,14 @@ type Ingredient struct {
 }
 
 type Recipe struct {
-	Label       string       `json:"label"`
-	Image       string       `json:"image"`
-	Source      string       `json:"source"`
-	URL         string       `json:"url"`
-	Yield       float64      `json:"yield"`
-	Ingredients []Ingredient `json:"ingredients"`
-	Calories    float64      `json:"calories"`
-	TotalTime   float64      `json:"totalTime"`
+	Label           string       `json:"label"`
+	Image           string       `json:"image"`
+	Source          string       `json:"source"`
+	URL             string       `json:"url"`
+	Yield           float64      `json:"yield"`
+	Ingredients     []Ingredient `json:"ingredients"`
+	Calories        float64      `json:"calories"`
+	TotalTime       float64      `json:"totalTime"`
 	RoundedCalories int
 }
 
@@ -78,26 +78,26 @@ func submitHandler(c *gin.Context) {
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
 	if err != nil {
-			c.String(http.StatusInternalServerError, "Error getting data from Edamam: "+err.Error())
-			return
+		c.String(http.StatusInternalServerError, "Error getting data from Edamam: "+err.Error())
+		return
 	}
 	defer resp.Body.Close()
 
 	var edamamResponse EdamamResponse
 	err = json.NewDecoder(resp.Body).Decode(&edamamResponse)
 	if err != nil {
-			c.String(http.StatusInternalServerError, "Error decoding JSON from Edamam: "+err.Error())
-			return
+		c.String(http.StatusInternalServerError, "Error decoding JSON from Edamam: "+err.Error())
+		return
 	}
 
 	if len(edamamResponse.Hits) == 0 {
-			c.String(http.StatusNotFound, "Error not found")
-			return
+		c.String(http.StatusNotFound, "Error not found")
+		return
 	}
 
 	recipes := make([]Recipe, len(edamamResponse.Hits))
 	for i := 0; i < len(edamamResponse.Hits); i++ {
-			recipes[i] = edamamResponse.Hits[i].Recipe
+		recipes[i] = edamamResponse.Hits[i].Recipe
 	}
 
 	for i := 0; i < len(edamamResponse.Hits); i++ {
@@ -114,15 +114,14 @@ func submitHandler(c *gin.Context) {
 
 	// カロリーでソートするかどうかチェック
 	if sortCalories == "on" {
-			// カロリーでレシピを昇順にソート
-			sort.Slice(recipes, func(i, j int) bool {
-					return recipes[i].Calories < recipes[j].Calories
-			})
+		// カロリーでレシピを昇順にソート
+		sort.Slice(recipes, func(i, j int) bool {
+			return recipes[i].Calories < recipes[j].Calories
+		})
 	}
 
 	c.HTML(http.StatusOK, "index.html", gin.H{"recipes": recipes})
 }
-
 
 func topHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", nil)
@@ -140,6 +139,9 @@ func recipeHandler(c *gin.Context) {
 		c.HTML(http.StatusOK, "recipe.html", gin.H{"recipe": recipe})
 	}
 }
+func apiDocumentationHandler(c *gin.Context) {
+	c.HTML(http.StatusOK, "apiDocument.html", nil)
+}
 
 func main() {
 	r := gin.Default()
@@ -156,10 +158,9 @@ func main() {
 	})
 	r.POST("/login", auth.LoginUser)
 
-
 	r.GET("/", topHandler)
-
 	r.POST("/submit", submitHandler)
 	r.GET("/recipe/:index", recipeHandler)
+	r.GET("/api-documentation", apiDocumentationHandler)
 	r.Run(":8080")
 }
