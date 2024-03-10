@@ -143,6 +143,7 @@ func pageNationHandler(c *gin.Context) {
 		recipesSlice = append(recipesSlice, recipe)
 	}
 	store.mu.RUnlock()
+	// log.Println("recipesSlice", recipesSlice)
 
 	// Calculating pagination values
 	totalRecipes := len(recipesSlice)
@@ -156,12 +157,23 @@ func pageNationHandler(c *gin.Context) {
 
 	start := (page - 1) * pageSize
 	end := start + pageSize
+	var i int // Declare the variable "i"
 	if end > totalRecipes {
 		end = totalRecipes
 	}
 
+	separateRecipes := []Recipe{}
+	for i = start; i < end; i++ { // Assign the value of "start" to "i"
+		if recipe, exists := store.GetRecipe(i); exists {
+			separateRecipes = append(separateRecipes, recipe) // Add the value of "i" to the slice
+		} else {
+			log.Println("Recipe not found")
+		}
+	}
+
 	// Getting the slice for the current page
-	currentPageRecipes := recipesSlice[start:end]
+	log.Println("start", start, "end", end)
+	// currentPageRecipes := recipesSlice[start:end]
 
 	// トータルページ数を考慮したページネーションデータの修正
 	paginationData := PageNationData{
@@ -175,7 +187,7 @@ func pageNationHandler(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "index.html", gin.H{
-		"recipes":  currentPageRecipes,
+		"recipes":  separateRecipes,
 		"pagenation": paginationData,
 	})
 }
@@ -218,8 +230,8 @@ func main() {
 
 	r.GET("/", topHandler)
 	r.POST("/submit", submitHandler)
-	r.GET("/recipe/:index", recipeHandler)
 	r.GET("/submit/page/:page", pageNationHandler)
+	r.GET("/recipe/:index", recipeHandler)
 	r.GET("/api-documentation", apiDocumentationHandler)
 	r.Run(":8080")
 }
