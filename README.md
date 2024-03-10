@@ -12,7 +12,7 @@ webAPIの機能はレシピ検索、ページ分け、APIドキュメントの�
 
 # DEMO
 ## サインアップ画面
-<img width="1128" alt="image" src="https://github.com/teamc-backendwebAPI/webAPI/assets/112442087/d9da82c7-a6ca-433a-964e-b548cf9ec214">
+<img width="600" alt="image" src="https://github.com/teamc-backendwebAPI/webAPI/assets/112442087/d9da82c7-a6ca-433a-964e-b548cf9ec214">
 
 ## サイト全体の流れ
 
