@@ -44,6 +44,7 @@
           {{ end }}
           <li class="nav-item">
             <a class="nav-link" href="/api-documentation">APIドキュメント</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -85,52 +86,39 @@
     </div>
 
     <div class="container mt-5">
-      {{range .recipes}}
-      <div class="row justify-content-center my-4">
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{.Label}}</h5>
+      <div class="row justify-content-center">
+        {{range $index, $recipe := .recipes}}
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <!-- レシピの画像をクリックすると、詳細ページに遷移する -->
+            <a href="/recipe/{{$index}}">
               <img
-                src="{{.Image}}"
-                class="img-fluid rounded"
-                alt="{{.Label}}"
+                src="{{$recipe.Image}}"
+                class="card-img-top"
+                alt="{{$recipe.Label}}"
               />
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                  Ingredients:
-                  <ul>
-                    {{range .Ingredients}}
-                    <li>{{.Text}}</li>
-                    {{end}}
-                  </ul>
-                </li>
-                <li class="list-group-item">
-                  Nutrition: Calories {{.RoundedCalories}} kcal
-                </li>
-                <li class="list-group-item">
-                  Source: {{.Source}}, URL: <a href="{{.URL}}">{{.URL}}</a>
-                </li>
-                <li class="list-group-item">
-                  Total Time: {{.TotalTime}} minutes
-                </li>
-              </ul>
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">{{$recipe.Label}}</h5>
+              <p class="card-text">Source: {{$recipe.Source}}</p>
             </div>
           </div>
         </div>
+        {{end}}
       </div>
-      {{end}}
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
           <li class="page-item {{if eq .prevPage .page}}disabled{{end}}">
-            <a class="page-link" href="?page={{.prevPage}}" aria-label="Previous">
+            <a
+              class="page-link"
+              href="?page={{.prevPage}}"
+              aria-label="Previous"
+            >
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
           <li class="page-item disabled">
-            <a class="page-link" href="#">
-              Page {{.page}}
-            </a>
+            <a class="page-link" href="#"> Page {{.page}} </a>
           </li>
           <li class="page-item {{if eq .nextPage .page}}disabled{{end}}">
             <a class="page-link" href="?page={{.nextPage}}" aria-label="Next">
@@ -140,7 +128,6 @@
         </ul>
       </nav>
     </div>
-    
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
