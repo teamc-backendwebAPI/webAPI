@@ -72,6 +72,8 @@ DB_DBNAME=c_auth
                 POST <code>/submit</code>　入力してもらったレシピ名を送信してもらい、その種類や詳細なレシピ情報を上記サイトから取得する。</li>
             <li>レシピ詳細表示 API のエンドポイント<br>
                 GET <code>/recipe/:index</code>　選択したレシピの詳細情報を取得し表示する。</li>
+            <li>cURLを利用した料理のjsonデータの取得<br>
+                GET <code>/api/search?k={keyword}</code>　keywordに入れたレシピにヒットする料理のjsonデータを取得。web画面に表示。</li>
         </ol>
         <br>
         <h1 id="リクエスト">リクエスト</h1>

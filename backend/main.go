@@ -62,7 +62,7 @@ func NewMemoryStore() *MemoryStore {
 func (store *MemoryStore) SavePagination(page int) {
 	store.mu.Lock()
 	defer store.mu.Unlock()
-	
+
 	store.currentPage = page
 }
 
@@ -94,16 +94,18 @@ func (store *MemoryStore) GetRecipe(id int) (Recipe, bool) {
 
 var separateRecipes []Recipe
 
-func submitHandler(c *gin.Context) {
-	log.Println("submitHandler")
-	name := c.PostForm("name")
-	sortCalories := c.PostForm("sortCalories") // ソートオプションの値を取得
+func getJsonDataRecipes(c *gin.Context){
+	name := c.Query("k")
+	recipes := getRecipe(name, c)
+	c.JSON(http.StatusOK, recipes)
+}
 
+func getRecipe(name string, c *gin.Context) []Recipe {
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Error getting data from Edamam: "+err.Error())
-		return
+		return nil
 	}
 	defer resp.Body.Close()
 
@@ -111,12 +113,12 @@ func submitHandler(c *gin.Context) {
 	err = json.NewDecoder(resp.Body).Decode(&edamamResponse)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Error decoding JSON from Edamam: "+err.Error())
-		return
+		return nil
 	}
 
 	if len(edamamResponse.Hits) == 0 {
 		c.String(http.StatusNotFound, "Error not found")
-		return
+		return nil
 	}
 
 	recipes := make([]Recipe, len(edamamResponse.Hits))
@@ -124,37 +126,46 @@ func submitHandler(c *gin.Context) {
 		recipes[i] = edamamResponse.Hits[i].Recipe
 	}
 
-	for i := 0; i < len(edamamResponse.Hits); i++ {
-		recipe := edamamResponse.Hits[i].Recipe
+	return recipes
+}
+
+func submitHandler(c *gin.Context) {
+	name := c.PostForm("name")
+	sortCalories := c.PostForm("sortCalories")
+
+	recipes := getRecipe(name, c)
+
+	for i := 0; i < len(recipes); i++ {
+		recipe := recipes[i]
 		recipe.RoundedCalories = int(math.Round(recipe.Calories))
 		recipes[i] = recipe
 		store.SaveRecipe(recipe, i)
 	}
 
-	recipes = nil
-	for i := 0; i < len(edamamResponse.Hits); i++ {
-		recipes = append(recipes, edamamResponse.Hits[i].Recipe)
+	for i := 0; i < len(recipes); i++ {
+		recipes = append(recipes, recipes[i])
 	}
 
-	// カロリーでソートするかどうかチェック
 	if sortCalories == "on" {
-		// カロリーでレシピを昇順にソート
 		sort.Slice(recipes, func(i, j int) bool {
 			return recipes[i].Calories < recipes[j].Calories
 		})
+	}
+
+	if recipe, exists := store.GetRecipe(1); exists {
+		log.Println("recipe", recipe)
 	}
 
 	pageNationHandler(c)
 }
 
 func pageNationHandler(c *gin.Context) {
+	log.Println("pageNationHandler")
 	pageStr := c.Param("page")
 	page, _ := strconv.Atoi(pageStr)
 	pageSize := 6 // Assuming a fixed page size for simplicity
 
 	store.SavePagination(page)
-
-	log.Println("pageNationHandler", page)
 
 	store.mu.RLock() // Lock for reading
 	recipesSlice := make([]Recipe, 0, len(store.Recipes))
@@ -253,6 +264,7 @@ func main() {
 
 	r.GET("/", topHandler)
 	r.POST("/submit", submitHandler)
+	r.GET("/api/search", getJsonDataRecipes)
 	r.GET("/submit/page/:page", pageNationHandler)
 	r.GET("/recipe/:index", recipeHandler)
 	r.GET("/api-documentation", apiDocumentationHandler)
