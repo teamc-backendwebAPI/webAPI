@@ -94,12 +94,6 @@ func (store *MemoryStore) GetRecipe(id int) (Recipe, bool) {
 
 var separateRecipes []Recipe
 
-func getJsonDataRecipes(c *gin.Context){
-	name := c.Query("k")
-	recipes := getRecipe(name, c)
-	c.JSON(http.StatusOK, recipes)
-}
-
 func getRecipe(name string, c *gin.Context) []Recipe {
 	url := "https://api.edamam.com/api/recipes/v2?type=public&q=" + name + "&app_id=1f53f4d6&app_key=8cfa79ecfe3f0a623174bfa1bd2e2d4d"
 	resp, err := http.Get(url)
@@ -129,6 +123,12 @@ func getRecipe(name string, c *gin.Context) []Recipe {
 	return recipes
 }
 
+func getJsonDataRecipes(c *gin.Context){
+	name := c.Query("k")
+	recipes := getRecipe(name, c)
+	c.JSON(http.StatusOK, recipes)
+}
+
 func submitHandler(c *gin.Context) {
 	name := c.PostForm("name")
 	sortCalories := c.PostForm("sortCalories")
@@ -142,25 +142,16 @@ func submitHandler(c *gin.Context) {
 		store.SaveRecipe(recipe, i)
 	}
 
-	for i := 0; i < len(recipes); i++ {
-		recipes = append(recipes, recipes[i])
-	}
-
 	if sortCalories == "on" {
 		sort.Slice(recipes, func(i, j int) bool {
 			return recipes[i].Calories < recipes[j].Calories
 		})
 	}
 
-	if recipe, exists := store.GetRecipe(1); exists {
-		log.Println("recipe", recipe)
-	}
-
 	pageNationHandler(c)
 }
 
 func pageNationHandler(c *gin.Context) {
-	log.Println("pageNationHandler")
 	pageStr := c.Param("page")
 	page, _ := strconv.Atoi(pageStr)
 	pageSize := 6 // Assuming a fixed page size for simplicity
@@ -200,9 +191,6 @@ func pageNationHandler(c *gin.Context) {
 		}
 	}
 
-	// Getting the slice for the current page
-	log.Println("start", start, "end", end)
-
 	// トータルページ数を考慮したページネーションデータの修正
 	paginationData := PageNationData{
 		NextPage:    page + 1,
@@ -216,7 +204,7 @@ func pageNationHandler(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"recipes":  separateRecipes,
-		"pagenation": paginationData,
+		"pagination": paginationData,
 	})
 }
 
