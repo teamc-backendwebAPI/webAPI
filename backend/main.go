@@ -135,17 +135,17 @@ func submitHandler(c *gin.Context) {
 
 	recipes := getRecipe(name, c)
 
-	if sortCalories == "on" {
-		sort.Slice(recipes, func(i, j int) bool {
-			return recipes[i].Calories < recipes[j].Calories
-		})
-	}
-
 	for i := 0; i < len(recipes); i++ {
 		recipe := recipes[i]
 		recipe.RoundedCalories = int(math.Round(recipe.Calories))
 		recipes[i] = recipe
 		store.SaveRecipe(recipe, i)
+	}
+
+	if sortCalories == "on" {
+		sort.Slice(recipes, func(i, j int) bool {
+			return recipes[i].Calories < recipes[j].Calories
+		})
 	}
 
 	pageNationHandler(c)
