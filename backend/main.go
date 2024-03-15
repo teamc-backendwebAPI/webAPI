@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -60,10 +61,11 @@ func NewMemoryStore() *MemoryStore {
 }
 
 func (store *MemoryStore) SavePagination(page int) {
+	
 	store.mu.Lock()
 	defer store.mu.Unlock()
-
 	store.currentPage = page
+
 }
 
 func (store *MemoryStore) GetPagination() int {
@@ -130,10 +132,20 @@ func getJsonDataRecipes(c *gin.Context){
 }
 
 func submitHandler(c *gin.Context) {
-	name := c.PostForm("name")
+	name := strings.TrimSpace(c.PostForm("name"))
 	sortCalories := c.PostForm("sortCalories")
 
 	recipes := getRecipe(name, c)
+
+	if recipes == nil {
+		c.String(http.StatusNotFound, "No recipes found")
+		return
+	}
+
+	if name == "" {
+		c.String(http.StatusBadRequest, "Please enter a recipe name")
+		return
+	}
 
 	if sortCalories == "on" {
 		sort.Slice(recipes, func(i, j int) bool {
@@ -240,6 +252,8 @@ func main() {
 	auth.DbInit()
 	// frontendディレクトリの中身を読み込む
 	r.LoadHTMLGlob("../frontend/*")
+
+	// データベースの操作
 	r.GET("/signup", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "signup.html", nil)
 	})
@@ -251,8 +265,8 @@ func main() {
 	r.POST("/login", auth.LoginUser)
 
 	r.GET("/", topHandler)
-	r.POST("/submit", submitHandler)
 	r.GET("/api/search", getJsonDataRecipes)
+	r.POST("/submit", submitHandler)
 	r.GET("/submit/page/:page", pageNationHandler)
 	r.GET("/recipe/:index", recipeHandler)
 	r.GET("/api-documentation", apiDocumentationHandler)
