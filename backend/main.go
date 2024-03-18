@@ -264,6 +264,7 @@ func main() {
 	})
 	r.POST("/login", auth.LoginUser)
 
+	
 	r.GET("/", topHandler)
 	r.GET("/api/search", getJsonDataRecipes)
 	r.POST("/submit", submitHandler)

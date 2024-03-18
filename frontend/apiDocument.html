@@ -68,12 +68,101 @@ DB_DBNAME=c_auth
         <p><code>go get</code>コマンドで不足しているライブラリはインポートしてから<code>go run .</code>をmain.goがあるディレクトリで実行してください。</p>
         <h1 id="エンドポイント">エンドポイント</h1>
         <ol>
-            <li>レシピ検索 API のエンドポイント<br>
-                POST <code>/submit</code>　入力してもらったレシピ名を送信してもらい、その種類や詳細なレシピ情報を上記サイトから取得する。</li>
-            <li>レシピ詳細表示 API のエンドポイント<br>
-                GET <code>/recipe/:index</code>　選択したレシピの詳細情報を取得し表示する。</li>
-            <li>cURLを利用した料理のjsonデータの取得<br>
-                GET <code>/api/search?k={keyword}</code>　keywordに入れたレシピにヒットする料理のjsonデータを取得。web画面に表示。</li>
+            <li>
+                <p>新しいユーザーを登録するエンドポイント</p>
+                <p>エンドポイント:</p>
+                <p>
+                POST <code>　/signup</code>
+                </p>
+                <p>cURL 例:</p>
+                <p>
+                <code> curl -X POST http://localhost:8080/signup</code>
+                </p>
+            </li>
+            <br>
+            <li>
+                <p>ユーザーがログインするエンドポイント</p>
+                <p>エンドポイント:</p>
+                <p>
+                POST <code>　/login</code>
+                </p>
+                <p>cURL 例:</p>
+                <p>
+                <code> curl -X POST http://localhost:8080/login</code>
+                </p>
+            </li>
+            <br>
+            <li>
+                <p>トップページにアクセスするエンドポイント</p>
+                <p>エンドポイント:</p>
+                <p>
+                GET <code>　/</code>
+                </p>
+                <p>cURL 例:</p>
+                <p>
+                curl <code> 　http://localhost:8080/</code>
+                </p>
+            </li>
+            <br>
+            <li>
+                <p>検索したレシピからJSONを取得するエンドポイント</p>
+                <p>エンドポイント:</p>
+                <p>
+                GET <code>　/api/search?k={keyword}</code>
+                </p>
+                <p>cURL 例:</p>
+                <p>
+                curl <code> 　http://localhost:8080/api/search?k=apple</code>
+                </p>
+            </li>
+            <br>
+            <li>
+                <p>取得したJSONをカロリーで昇順にするか選べその後HTMLに返すエンドポイント</p>
+                <p>エンドポイント:</p>
+                <p>
+                POST <code>　/submit</code>
+                </p>
+                <p>cURL 例:</p>
+                <p>
+                curl <code> 　http://localhost:8080/submit</code>
+                </p>
+            </li>
+            <br>
+            <li>
+                <p>指定したページ投稿の取得をするエンドポイント</p>
+                <p>エンドポイント:</p>
+                <p>
+                GET <code>　/submit/page/{pagenumber}</code>
+                </p>
+                <p>cURL 例:</p>
+                <p>
+                curl <code> 　http://localhost:8080/submit/page/2</code>
+                </p>
+            </li>
+            <br>
+            <li>
+                <p>指定したレシピの詳細を取得するエンドポイント</p>
+                <p>エンドポイント:</p>
+                <p>
+                GET <code>　/recipe/{pageindex}</code>
+                </p>
+                <p>cURL 例:</p>
+                <p>
+                curl <code> 　http://localhost:8080/recipe/0</code>
+                </p>
+            </li>
+            <br>
+            <li>
+                <p>APIドキュメントを表示するエンドポイント</p>
+                <p>エンドポイント:</p>
+                <p>
+                GET <code>　/api-documentation</code>
+                </p>
+                <p>cURL 例:</p>
+                <p>
+                curl <code> 　http://localhost:8080/api-documentation</code>
+                </p>
+            </li>
         </ol>
         <br>
         <h1 id="リクエスト">リクエスト</h1>
